@@ -1,0 +1,11 @@
+name: DeathSwap
+description: DeathSwap Plugin
+author: xxBen
+version: 1.0
+api-version: 1.18
+main: me.xxben.deathswap.DeathSwap
+
+commands:
+  deathswap:
+    description: Death Swap Main Command
+    aliases: [dswap, ds]
