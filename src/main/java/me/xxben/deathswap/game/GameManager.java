@@ -35,16 +35,24 @@ public class GameManager {
         if (delay != null)
             delay.cancel();
 
+        // reset round timer
+        currentRoundSecs = 0;
+
         if (!forceStopped) {
             Bukkit.broadcastMessage("");
             Bukkit.broadcastMessage(Utils.color("&a&l" + winner.getName() + " HAS WON DEATH SWAP!"));
             Bukkit.broadcastMessage("");
 
             // 5 fireworks
-            for (int i = 1; i <= 5; i++) {
-                new BukkitRunnable() {
-                    @Override
-                    public void run() {
+            new BukkitRunnable() {
+                int i = 0;
+                @Override
+                public void run() {
+
+                    // if more than 5 fireworks, cancel
+                    if (i >= 5)
+                        cancel();
+                    else {
                         Firework firework = winner.getWorld().spawn(winner.getLocation(), Firework.class);
                         FireworkMeta meta = firework.getFireworkMeta();
 
@@ -59,12 +67,13 @@ public class GameManager {
                                 .withFade(Color.WHITE)
                                 .build();
 
-                        meta.setPower(5);
+                        meta.setPower(2);
                         meta.addEffect(effect);
                         firework.setFireworkMeta(meta);
+                        i++;
                     }
-                }.runTaskLater(DeathSwap.getInstance(), 20 * 2);
-            }
+                }
+            }.runTaskTimer(DeathSwap.getInstance(), 0, 20 * 2);
         } else {
             Bukkit.broadcastMessage("");
             Bukkit.broadcastMessage(Utils.color("&aDeath Swap was forcefully stopped"));
